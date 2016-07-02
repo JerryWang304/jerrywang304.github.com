@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog | 王丰的博客
+          堆喷射技术 - Jerry&#39;s Blog | 王丰的博客
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/">
+    <link rel="canonical" href="http://yoursite.com/2016/07/02/堆喷射技术/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,156 +140,101 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg-o.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg-o.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Jerry&#39;s blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading"></span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#系统安全" title="系统安全">系统安全</a>
+                        
+                          <a class="tag" href="/tags/#程序漏洞" title="程序漏洞">程序漏洞</a>
+                        
+                          <a class="tag" href="/tags/#堆喷射" title="堆喷射">堆喷射</a>
+                        
+                    </div>
+                    <h1>堆喷射技术</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2016-07-02
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h2 id="堆喷射技术介绍"><a href="#堆喷射技术介绍" class="headerlink" title="堆喷射技术介绍"></a>堆喷射技术介绍</h2><h3 id="堆是什么？"><a href="#堆是什么？" class="headerlink" title="堆是什么？"></a>堆是什么？</h3><p>在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。</p>
+<h3 id="堆溢出"><a href="#堆溢出" class="headerlink" title="堆溢出"></a>堆溢出</h3><p>举个例子<br><figure class="highlight c++"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    HANDLE hHeap;</div><div class="line">    <span class="keyword">char</span> *buff1,*buff2;</div><div class="line">    <span class="keyword">char</span> buffer[<span class="number">240</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">240</span>;i++)</div><div class="line">	    buffer[i] = <span class="string">'A'</span>;</div><div class="line">    hHeap = HeapCreate(HEAP_GENERATE_EXCEPTIONS,<span class="number">0X10000</span>,<span class="number">0XFFFF</span>);</div><div class="line">    buff1 = (<span class="keyword">char</span> *)HeapAlloc(hHeap,<span class="number">0</span>,<span class="number">200</span>);</div><div class="line">    <span class="built_in">strcpy</span>(buff1,buffer);</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"buff1 = %s"</span>,buff1);</div><div class="line">    buff2 = (<span class="keyword">char</span> *)HeapAlloc(hHeap,<span class="number">0</span>,<span class="number">16</span>);</div><div class="line">    HeapFree(hHeap,<span class="number">0</span>,buff1);</div><div class="line">    HeapFree(hHeap,<span class="number">0</span>,buff2);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>分配buff2之前，堆空间是这样的：<br><img src="heap.png" alt="heap"><br>空闲的堆块是通过双链表的形式连接的。对于未使用的堆块，header之后的8个字节里存的是头指针(flink)和尾指针(blink)。当操作系统为buff2分配一块空闲堆块时，需要在原来的双链表里将对应的空闲块删掉。在删除节点的两步中，第一步是将此节点的下一个节点的flink覆盖为当前节点的flink，即：<code>mov |blink|,flink</code>。由于此时flink和blink都被赋值为<em>AAAAAAAA</em>，相当于要往<em>0x41414141</em>中写入数据。但<em>0x41414141</em>是不能进行写操作的。</p>
+<p>如果flink设置为shellcode的地址，将blink设置为函数返回的地址。那么当函数返回时，就会把返回地址给EIP执行，但此时的返回地址已经别篡改为shellcode的地址。因此系统就会执行shellcode。</p>
 
 
-<div class="post-preview">
+                <hr>
 
-    <a href="/2016/07/02/堆喷射技术/">
-        <h2 class="post-title">
-            堆喷射技术
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            堆喷射技术介绍堆是什么？在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。
-堆溢出举个例子#include&lt;windows.h&gt;#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main() &#123;    HANDLE hHeap; ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-02
-    </p>
+                
 
-</div>
-<hr>
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/06/30/intro-hexo/" data-toggle="tooltip" data-placement="top" title="使用Hexo搭建个人博客">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
 
-<div class="post-preview">
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2016/07/02/堆喷射技术/"
+                        data-title="堆喷射技术"
+                        data-url="http://yoursite.com/2016/07/02/堆喷射技术/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
-    <a href="/2016/06/30/intro-hexo/">
-        <h2 class="post-title">
-            使用Hexo搭建个人博客
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            戳我
-步骤
-安装hexo
-选择一个Hexo主题，到对应的repository里面下载
-启动hexo，浏览器访问这里
-将代码上传到仓库中。如果是上传到usename.github.io里面，则需要push到master分支。
-
-
-另起一行
-js joke
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-06-30
-    </p>
-
-</div>
-<hr>
-
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-    
-</ul>
-
+                
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/cute.jpg" />
-                        
-
-                        
-                            <p>只要心中有景，何处不是花香满径</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/JerryWang304">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -302,9 +247,69 @@ js joke
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
