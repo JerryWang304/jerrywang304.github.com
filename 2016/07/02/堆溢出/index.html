@@ -13,11 +13,11 @@
 
     <title>
         
-          使用Hexo搭建个人博客 - Jerry&#39;s Blog | 王丰的博客
+          堆溢出 - Jerry&#39;s Blog | 王丰的博客
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2016/06/30/intro-hexo/">
+    <link rel="canonical" href="http://yoursite.com/2016/07/02/堆溢出/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -158,18 +158,18 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#Hexo" title="Hexo">Hexo</a>
+                          <a class="tag" href="/tags/#系统安全" title="系统安全">系统安全</a>
                         
-                          <a class="tag" href="/tags/#Introduction" title="Introduction">Introduction</a>
+                          <a class="tag" href="/tags/#程序漏洞" title="程序漏洞">程序漏洞</a>
                         
-                          <a class="tag" href="/tags/#Blog" title="Blog">Blog</a>
+                          <a class="tag" href="/tags/#堆" title="堆">堆</a>
                         
                     </div>
-                    <h1>使用Hexo搭建个人博客</h1>
+                    <h1>堆溢出</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Jerry Wang on
-                        2016-06-30
+                        2016-07-02
                     </span>
                 </div>
             </div>
@@ -188,16 +188,11 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p><a href="#now">戳我</a></p>
-<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
-<li>安装hexo</li>
-<li>选择一个Hexo主题，到对应的<em>repository</em>里面下载</li>
-<li>启动hexo，浏览器访问<a href="http://localhost:4000" target="_blank" rel="external">这里</a></li>
-<li>将代码上传到仓库中。如果是上传到<em>usename.github.io</em>里面，则需要push到master分支。</li>
-</ol>
-<hr>
-<p>另起一行</p>
-<p></p><p id="now"></p><br><img src="javascript-java.jpg" alt="js"><br><small class="img-hint">js joke</small><p></p>
+                <h2 id="堆溢出技术介绍"><a href="#堆溢出技术介绍" class="headerlink" title="堆溢出技术介绍"></a>堆溢出技术介绍</h2><h3 id="堆是什么？"><a href="#堆是什么？" class="headerlink" title="堆是什么？"></a>堆是什么？</h3><p>在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。</p>
+<h3 id="堆溢出"><a href="#堆溢出" class="headerlink" title="堆溢出"></a>堆溢出</h3><p>举个例子<br><figure class="highlight c++"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    HANDLE hHeap;</div><div class="line">    <span class="keyword">char</span> *buff1,*buff2;</div><div class="line">    <span class="keyword">char</span> buffer[<span class="number">240</span>];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">240</span>;i++)</div><div class="line">        buffer[i] = <span class="string">'A'</span>;</div><div class="line">    hHeap = HeapCreate(HEAP_GENERATE_EXCEPTIONS,<span class="number">0X10000</span>,<span class="number">0XFFFF</span>);</div><div class="line">    buff1 = (<span class="keyword">char</span> *)HeapAlloc(hHeap,<span class="number">0</span>,<span class="number">200</span>);</div><div class="line">    <span class="built_in">strcpy</span>(buff1,buffer);</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"buff1 = %s"</span>,buff1);</div><div class="line">    buff2 = (<span class="keyword">char</span> *)HeapAlloc(hHeap,<span class="number">0</span>,<span class="number">16</span>);</div><div class="line">    HeapFree(hHeap,<span class="number">0</span>,buff1);</div><div class="line">    HeapFree(hHeap,<span class="number">0</span>,buff2);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>分配buff2之前，堆空间是这样的：<br><img src="heap.png" alt="heap"><br>空闲的堆块是通过双链表的形式连接的。对于未使用的堆块，header之后的8个字节里存的是头指针(flink)和尾指针(blink)。当操作系统为buff2分配一块空闲堆块时，需要在原来的双链表里将对应的空闲块删掉。在删除节点的两步中，第一步是将此节点的下一个节点的flink覆盖为当前节点的flink，即：<code>mov |blink|,flink</code>。由于此时flink和blink都被赋值为<em>AAAAAAAA</em>，相当于要往<em>0x41414141</em>中写入数据。但<em>0x41414141</em>是不能进行写操作的。</p>
+<p>如果flink设置为shellcode的地址，将blink设置为函数返回的地址。那么当函数返回时，就会把返回地址给EIP执行，但此时的返回地址已经别篡改为shellcode的地址。因此系统就会执行shellcode。</p>
+<h3 id="堆喷射"><a href="#堆喷射" class="headerlink" title="堆喷射"></a>堆喷射</h3><p>堆喷射其实不一定非得跟堆有关系，堆喷射只是一种payload传递技术，借助堆将shellcode放置在可预测的堆地址上，然后稳定地跳入shellcode。这个链接有详细的解释<a href="https://www.corelan.be/index.php/2011/12/31/exploit-writing-tutorial-part-11-heap-spraying-demystified/" target="_blank" rel="external">Heap Spray</a></p>
 
 
                 <hr>
@@ -207,9 +202,13 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2016/07/02/堆溢出/" data-toggle="tooltip" data-placement="top" title="堆溢出">&larr; Previous Post</a>
+                            <a href="/2016/07/14/ARP攻击/" data-toggle="tooltip" data-placement="top" title="ARP攻击">&larr; Previous Post</a>
                         </li>
                     
+                    
+                        <li class="next">
+                            <a href="/2016/06/30/intro-hexo/" data-toggle="tooltip" data-placement="top" title="使用Hexo搭建个人博客">Next Post &rarr;</a>
+                        </li>
                     
                 </ul>
 
@@ -217,9 +216,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/06/30/intro-hexo/"
-                        data-title="使用Hexo搭建个人博客"
-                        data-url="http://yoursite.com/2016/06/30/intro-hexo/" >
+                        data-thread-key="2016/07/02/堆溢出/"
+                        data-title="堆溢出"
+                        data-url="http://yoursite.com/2016/07/02/堆溢出/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
