@@ -177,6 +177,31 @@
 
 <div class="post-preview">
 
+    <a href="/2016/07/16/缓冲区溢出/">
+        <h2 class="post-title">
+            缓冲区溢出
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            
+环境： Windows XP SP3, VC6.0
+
+先上代码：
+#include&lt;stdio.h&gt;#include&lt;string.h&gt;#include&lt;windows.h&gt;char name[] = "\x41\x41\x41\x41""\x41\x41\x41\x41""\x41\x41\x41\x41" // 覆盖EBP"\x12\x45\xfa\......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Jerry Wang on
+        2016-07-16
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2016/07/14/ARP攻击/">
         <h2 class="post-title">
             ARP攻击
@@ -195,28 +220,6 @@ kali环境下arp攻击实例
     <p class="post-meta">
         Posted by Jerry Wang on
         2016-07-14
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/02/堆溢出/">
-        <h2 class="post-title">
-            堆溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            堆溢出技术介绍堆是什么？在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。
-堆溢出举个例子#include&lt;windows.h&gt;#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main() &#123;    HANDLE hHeap; ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-02
     </p>
 
 </div>

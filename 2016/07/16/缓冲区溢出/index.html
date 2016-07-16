@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog | 王丰的博客
+          缓冲区溢出 - Jerry&#39;s Blog | 王丰的博客
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/tags/系统安全/">
+    <link rel="canonical" href="http://yoursite.com/2016/07/16/缓冲区溢出/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -141,6 +141,176 @@
 
     <!-- Main Content -->
     
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg-o.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#buffer overflow" title="buffer overflow">buffer overflow</a>
+                        
+                    </div>
+                    <h1>缓冲区溢出</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2016-07-16
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <blockquote>
+<p>环境： Windows XP SP3, VC6.0</p>
+</blockquote>
+<p>先上代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="keyword">char</span> name[] = </div><div class="line"><span class="string">"\x41\x41\x41\x41"</span></div><div class="line"><span class="string">"\x41\x41\x41\x41"</span></div><div class="line"><span class="string">"\x41\x41\x41\x41"</span> <span class="comment">// 覆盖EBP</span></div><div class="line"><span class="string">"\x12\x45\xfa\x7f"</span> <span class="comment">// 将EIP覆盖为JMP ESP的地址</span></div><div class="line"><span class="string">"\x33\xDB\x53\x68\x66\x69\x73\x68\x68\x6B\x6F\x6F\x6B\x8B\xC4\x53\x50"</span> <span class="comment">// </span></div><div class="line"><span class="string">"\x50\x53\xB8"</span></div><div class="line"><span class="string">"\xEA\x07\xD5\x77"</span> <span class="comment">// 本机上messagebox的地址，每个机器是不一样的</span></div><div class="line"><span class="string">"\xFF\xD0\x53\xB8\xFA\xCA\x81\x7C\xFF\xD0"</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">char</span> output[<span class="number">8</span>];</div><div class="line">    LoadLibrary(<span class="string">"user32.dll"</span>);</div><div class="line">    <span class="built_in">strcpy</span>(output,name);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>strcpy()函数不做越界检查，这段代码将EBP和EIP都覆盖掉。EIP将会别覆盖为0x7ffa4512，这个地址是一个通用的JMP ESP指令地址，适合Windows系统。JMP ESP将从栈顶开始执行，即原来的EIP下面开始。本示例中的shellcode会调用messagebox函数，每台机器上的message函数地址不一样，如果你想执行这段代码的话，需要将这个地址替换为自己的。messagebox的地址可以通过以下代码获得：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*MYPROC)</span><span class="params">(LPTSTR)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">        HINSTANCE LibHandle;</div><div class="line">        MYPROC ProcAdd;</div><div class="line">        LibHandle = LoadLibrary(<span class="string">"user32"</span>);</div><div class="line">        </div><div class="line">        ProcAdd = (MYPROC)GetProcAddress(LibHandle,<span class="string">"MessageBoxA"</span>);</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"system = //x%x\n"</span>,ProcAdd);</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>效果如下<br><img src="result.png" alt="res"></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/07/14/ARP攻击/" data-toggle="tooltip" data-placement="top" title="ARP攻击">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2016/07/16/缓冲区溢出/"
+                        data-title="缓冲区溢出"
+                        data-url="http://yoursite.com/2016/07/16/缓冲区溢出/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://sukai.me" target="_blank">Kai Su&#39;s Blog</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
 
     <!-- Footer -->
     <!-- Footer -->
