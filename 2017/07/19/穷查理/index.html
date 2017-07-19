@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog
+          穷查理 - Jerry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/page/2/">
+    <link rel="canonical" href="http://yoursite.com/2017/07/19/穷查理/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,214 +147,91 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Jerry&#39;s blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading"></span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                    </div>
+                    <h1>穷查理</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2017-07-19
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
 
+                
 
-<div class="post-preview">
+                <hr>
 
-    <a href="/2016/07/16/缓冲区溢出/">
-        <h2 class="post-title">
-            缓冲区溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-环境： Windows XP SP3, VC6.0
+                
 
-先上代码：
-#include&lt;stdio.h&gt;#include&lt;string.h&gt;#include&lt;windows.h&gt;char name[] = "\x41\x41\x41\x41""\x41\x41\x41\x41""\x41\x41\x41\x41" // 覆盖EBP"\x12\x45\xfa\......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-16
-    </p>
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/04/04/How-to-write-a-Reader-Writer-Lock/" data-toggle="tooltip" data-placement="top" title="How to write a Reader-Writer Lock">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
 
-</div>
-<hr>
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/07/19/穷查理/"
+                        data-title="穷查理"
+                        data-url="http://yoursite.com/2017/07/19/穷查理/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
-<div class="post-preview">
-
-    <a href="/2016/07/14/ARP攻击/">
-        <h2 class="post-title">
-            ARP攻击
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-kali环境下arp攻击实例
-
-开启两台虚拟机，分别是kali和ubuntu。两台虚拟机必须在同一网段。ubuntu的ip: 192.168.99.162，网关为: 192.168.99.1kali自带了arpspoof攻击，若得知对方ip和网关，以及使用的网卡。那么使用下面的命令，则可以使对方上不了网arpspoof -i [网卡] -t [ip地址] [网关地址]
-在kali中输入命令......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-14
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/02/堆溢出/">
-        <h2 class="post-title">
-            堆溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            堆溢出技术介绍堆是什么？在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。
-堆溢出举个例子#include&lt;windows.h&gt;#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main() &#123;    HANDLE hHeap; ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-02
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/06/30/intro-hexo/">
-        <h2 class="post-title">
-            使用Hexo搭建个人博客
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            戳我
-步骤
-安装hexo
-选择一个Hexo主题，到对应的repository里面下载
-启动hexo，浏览器访问这里
-将代码上传到仓库中。如果是上传到usename.github.io里面，则需要push到master分支。
-
-
-另起一行
-js joke
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-06-30
-    </p>
-
-</div>
-<hr>
-
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-        <li class="previous">
-            <a href="/">&larr; Newer Posts</a>
-        </li>
-    
-    
-</ul>
-
-
-
-                <!-- 如果开启评论功能 -->
                 
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/cute.jpg" />
-                        
-
-                        
-                            <p>只要心中有景，何处不是花香满径</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/JerryWang304">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -369,9 +246,69 @@ js joke
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
