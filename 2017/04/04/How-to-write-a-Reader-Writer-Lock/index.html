@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          How to write a Reader-Writer Lock - Jerry&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://yoursite.com/2017/04/04/How-to-write-a-Reader-Writer-Lock/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Jerry&#39;s blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg-o.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Rust" title="Rust">Rust</a>
+                        
+                          <a class="tag" href="/tags/#Operating System" title="Operating System">Operating System</a>
+                        
+                    </div>
+                    <h1>How to write a Reader-Writer Lock</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2017-04-04
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>This is homework of my operating system course. Understanding the basic principle of Reader-Writer lock is not difficult. It is Rust that causes me to spend days working on it.  </p>
+<h3 id="Reader-Writer-Lock"><a href="#Reader-Writer-Lock" class="headerlink" title="Reader-Writer Lock"></a>Reader-Writer Lock</h3><p>RWLock allows multiple readers threads to simultaneously access the data. But only one writer is allowed to do so at any one time. As usual, to writer such a lock, we need a lock (maybe more) and conditional variables.</p>
+<p>What are so special of this lock that we need to consider<br>carefully ? What are the variables and data structures we may use to implement it ?</p>
+<ul>
+<li>Firstly, we need to consider when the readers/writers should wait. For a reader, it is definitely not allowed to read the data if there is some active writer modifying the shared data and vice versa.</li>
+<li>Secondly, we have to think about how to wake up other threads when the current reader/writer is done. In this homework we are required to implement reader-prefered/writer-prefered and FIFO/LIFO. By the way, the rwlock in std is not so complicated.</li>
+<li>Finally, to those who are not familiar with Rust yet, it will be suffering to write it.</li>
+</ul>
+<h3 id="Using-Rust"><a href="#Using-Rust" class="headerlink" title="Using Rust"></a>Using Rust</h3><p>The structure of RWLock is,<br><figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">struct</span> <span class="title">RwLock</span></span>&lt;T&gt; &#123;</div><div class="line">    mutex: Mutex&lt;()&gt;,</div><div class="line">    data: UnsafeCell&lt;T&gt;,</div><div class="line">    <span class="comment">// Hao Chen's requirements</span></div><div class="line">    pref: Preference,</div><div class="line">    order: Order,</div><div class="line"></div><div class="line">    state_vars: UnsafeCell&lt;Vars&gt;,</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Vars</span></span> &#123;</div><div class="line"></div><div class="line">    <span class="comment">// state variables</span></div><div class="line">    waiting_readers: <span class="built_in">Vec</span>&lt;Rc&lt;<span class="built_in">Box</span>&lt;Condvar&gt;&gt;&gt;,</div><div class="line">    waiting_writers: <span class="built_in">Vec</span>&lt;Rc&lt;<span class="built_in">Box</span>&lt;Condvar&gt;&gt;&gt;,</div><div class="line">    active_readers: <span class="keyword">u32</span>,</div><div class="line">    active_writers: <span class="keyword">u32</span>,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>mutex</strong> provides the exclusive access of RwLock. We need this because we don’t want to be disturbed when modify something.</p>
+<p><strong>data</strong> is what the reader and writer are looking for. We use UnsafeCell because we need interior mutability. Read <a href="https://doc.rust-lang.org/std/cell/struct.UnsafeCell.html" target="_blank" rel="external">this</a> if you want to learn more.</p>
+<p><strong> state_vars </strong> means state variables that including the waiting_writers/readers and active_writers/reader currently. In order to implement FIFO/LIFO, we give each thread a conditional variable that is used to wake the thread up in the future according to FIFO/LIFO. For instance, if I want to wake the first write up, which is waiting because readers are reading, we just call <code>waiting_writers[0].notify_one()</code>. Then the thread blocked on this conditional variable will continue and decide to move on or still keep on waiting.</p>
+<p>The two enums,<br><figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Preference</span></span> &#123;</div><div class="line">    <span class="comment">/// Readers-preferred</span></div><div class="line">    <span class="comment">/// * Readers must wait when a writer is active.</span></div><div class="line">    <span class="comment">/// * Writers must wait when a reader is active or waiting, or a writer is active.</span></div><div class="line">    Reader,</div><div class="line">    <span class="comment">/// Writers-preferred:</span></div><div class="line">    <span class="comment">/// * Readers must wait when a writer is active or waiting.</span></div><div class="line">    <span class="comment">/// * Writer must wait when a reader or writer is active.</span></div><div class="line">    Writer,</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/// In which order to schedule threads</span></div><div class="line"><span class="keyword">pub</span> <span class="class"><span class="keyword">enum</span> <span class="title">Order</span></span> &#123;</div><div class="line">    <span class="comment">/// First in first out</span></div><div class="line">    Fifo,</div><div class="line">    <span class="comment">/// Last in first out</span></div><div class="line">    Lifo,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>It is easy to write <code>write_should_wait()</code> and <code>read_should_wait()</code> based on the annotation in Preference. I won’t bother to elaborate on this.</p>
+<p>The reader,<br><figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">read</span></span>(&amp;<span class="keyword">self</span>) -&gt; <span class="built_in">Result</span>&lt;RwLockReadGuard&lt;T&gt;, ()&gt; &#123;</div><div class="line">    <span class="keyword">let</span> <span class="keyword">mut</span> guard = <span class="keyword">self</span>.mutex.lock().unwrap();</div><div class="line">    <span class="keyword">let</span> cv = Rc::new(<span class="built_in">Box</span>::new(Condvar::new())); <span class="comment">// point to a condvar</span></div><div class="line">    <span class="keyword">unsafe</span> &#123;</div><div class="line">        (*<span class="keyword">self</span>.state_vars.get()).waiting_readers.push(cv.clone());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> <span class="keyword">self</span>.read_should_wait() &#123;</div><div class="line">        guard = cv.wait(guard).unwrap();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">unsafe</span> &#123;</div><div class="line"></div><div class="line">        <span class="comment">//(*self.state_vars.get()).waiting_readers.pop();</span></div><div class="line">        <span class="keyword">match</span> <span class="keyword">self</span>.order &#123;</div><div class="line">            Order::Fifo =&gt; &#123;</div><div class="line">                (*<span class="keyword">self</span>.state_vars.get()).waiting_readers.remove(<span class="number">0</span>);</div><div class="line">            &#125;,</div><div class="line">            Order::Lifo =&gt; &#123;</div><div class="line">                (*<span class="keyword">self</span>.state_vars.get()).waiting_readers.pop();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        (*<span class="keyword">self</span>.state_vars.get()).active_readers += <span class="number">1</span>;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="literal">Ok</span>(</div><div class="line">        RwLockReadGuard &#123;</div><div class="line">            lock: &amp;<span class="keyword">self</span></div><div class="line">        &#125;</div><div class="line">    )</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>After we gain the lock, we have the exclusive access to the RWLock. Firstly, we need a new conditional variable as explained before. We put it on the heap to make sure it is alive. And we put the pointer into a Rc because we have to push it into a vector. If we don’t use a Rc, after push cv into the vector, we can’t access cv anymore. Don’t forget to pop cv out!</p>
+<p>We implement the Drop trait for RWLockReadGuard/RWLockWriteGuard, which is just a reference of the RWLock.<br><figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="comment">/// Releases the read lock</span></div><div class="line"><span class="keyword">impl</span>&lt;<span class="symbol">'a</span>, T&gt; <span class="built_in">Drop</span> <span class="keyword">for</span> RwLockReadGuard&lt;<span class="symbol">'a</span>, T&gt; &#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">fn</span> <span class="title">drop</span></span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</div><div class="line">        <span class="keyword">let</span> guard = <span class="keyword">self</span>.lock.mutex.lock().unwrap();</div><div class="line">        <span class="keyword">unsafe</span> &#123;</div><div class="line">            <span class="keyword">if</span> (*<span class="keyword">self</span>.lock.state_vars.get()).active_readers &gt; <span class="number">0</span> &#123;</div><div class="line">                (*<span class="keyword">self</span>.lock.state_vars.get()).active_readers -= <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">self</span>.lock.wakeup_other_threads();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>The main part is wakeup function. It is not so hard.<br><figure class="highlight rust"><table><tr><td class="code"><pre><div class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">wakeup_other_threads</span></span>(&amp;<span class="keyword">self</span>) &#123;</div><div class="line">        <span class="comment">//unsafe &#123;</span></div><div class="line">        <span class="comment">//    println!("&#123;:?&#125;", (*self.state_vars.get()).waiting_writers);</span></div><div class="line">        <span class="comment">//&#125;</span></div><div class="line">        <span class="keyword">match</span> <span class="keyword">self</span>.pref &#123;</div><div class="line">            Preference::Reader =&gt; &#123;</div><div class="line">                <span class="comment">// firstly weak up readers</span></div><div class="line">                <span class="keyword">unsafe</span> &#123;</div><div class="line">                    <span class="keyword">let</span> <span class="keyword">ref</span> <span class="keyword">mut</span> waiting_readers =  (*<span class="keyword">self</span>.state_vars.get()).waiting_readers;<span class="comment">// vector</span></div><div class="line">                    <span class="keyword">let</span> <span class="keyword">ref</span> <span class="keyword">mut</span> waiting_writers =  (*<span class="keyword">self</span>.state_vars.get()).waiting_writers;</div><div class="line">                    <span class="keyword">match</span> <span class="keyword">self</span>.order &#123;</div><div class="line">                        Order::Lifo =&gt; &#123;</div><div class="line"></div><div class="line">                            <span class="keyword">if</span> waiting_readers.len() &gt; <span class="number">0</span> &#123;</div><div class="line"></div><div class="line">                                <span class="keyword">let</span> len = waiting_readers.len();</div><div class="line">                                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..len &#123;</div><div class="line">                                    waiting_readers[len-<span class="number">1</span>-i].notify_one();</div><div class="line">                                &#125;</div><div class="line"></div><div class="line">                            &#125;<span class="keyword">else</span> <span class="keyword">if</span> waiting_writers.len() &gt; <span class="number">0</span> &#123;</div><div class="line"></div><div class="line">                                waiting_writers[waiting_writers.len()-<span class="number">1</span>].notify_one();</div><div class="line"></div><div class="line">                            &#125;</div><div class="line"></div><div class="line">                        &#125;,</div><div class="line">                        Order::Fifo =&gt; &#123;</div><div class="line">                            <span class="keyword">if</span> waiting_readers.len() &gt; <span class="number">0</span> &#123;</div><div class="line"></div><div class="line">                                <span class="keyword">let</span> len = waiting_readers.len();</div><div class="line">                                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..len &#123;</div><div class="line">                                    waiting_readers[i].notify_one();</div><div class="line">                                &#125;</div><div class="line"></div><div class="line"></div><div class="line">                            &#125;<span class="keyword">else</span> <span class="keyword">if</span> waiting_writers.len() &gt; <span class="number">0</span> &#123;</div><div class="line">                                waiting_writers[<span class="number">0</span>].notify_one();</div><div class="line"></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                    &#125;</div><div class="line">                &#125;            </div><div class="line">            &#125;,</div><div class="line">            Preference::Writer =&gt; &#123;</div><div class="line">                <span class="comment">// firstly weak up writers</span></div><div class="line">                <span class="keyword">unsafe</span> &#123;</div><div class="line">                    <span class="keyword">let</span> <span class="keyword">ref</span> <span class="keyword">mut</span> waiting_writers = (*<span class="keyword">self</span>.state_vars.get()).waiting_writers;<span class="comment">// vector</span></div><div class="line">                    <span class="keyword">let</span> <span class="keyword">ref</span> <span class="keyword">mut</span> waiting_readers = (*<span class="keyword">self</span>.state_vars.get()).waiting_readers;<span class="comment">// vector</span></div><div class="line"></div><div class="line">                    <span class="keyword">match</span> <span class="keyword">self</span>.order &#123;</div><div class="line">                        Order::Lifo =&gt; &#123;</div><div class="line"></div><div class="line">                            <span class="keyword">if</span> waiting_writers.len() &gt; <span class="number">0</span> &#123;</div><div class="line">                                waiting_writers[waiting_writers.len()-<span class="number">1</span>].notify_one();</div><div class="line"></div><div class="line">                            &#125;<span class="keyword">else</span> <span class="keyword">if</span> waiting_readers.len() &gt; <span class="number">0</span> &#123;</div><div class="line">                                <span class="keyword">let</span> len = waiting_readers.len();</div><div class="line">                                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..len &#123;</div><div class="line">                                    waiting_readers[len-<span class="number">1</span>-i].notify_one();</div><div class="line">                                &#125;                     </div><div class="line"></div><div class="line">                            &#125;</div><div class="line">                        &#125;,</div><div class="line">                        Order::Fifo =&gt; &#123;</div><div class="line">                            <span class="keyword">if</span> waiting_writers.len() &gt; <span class="number">0</span> &#123;</div><div class="line">                                <span class="comment">//println!("&amp;&amp;&amp; &#123;&#125; writers are waiting", waiting_writers.len());</span></div><div class="line">                                waiting_writers[<span class="number">0</span>].notify_one();</div><div class="line">                                <span class="comment">//println!("&amp;&amp;&amp;&amp; wake one writer &amp;&amp;&amp;&amp;");</span></div><div class="line"></div><div class="line">                            &#125;<span class="keyword">else</span> <span class="keyword">if</span> waiting_readers.len() &gt; <span class="number">0</span> &#123;</div><div class="line">                                <span class="keyword">let</span> len = waiting_readers.len();</div><div class="line">                                <span class="keyword">for</span> i <span class="keyword">in</span> <span class="number">0</span>..len &#123;</div><div class="line">                                    waiting_readers[i].notify_one();</div><div class="line">                                &#125;  </div><div class="line"></div><div class="line">                            &#125;                            </div><div class="line">                        &#125;,</div><div class="line">                    &#125;                           </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>See the source code <a href="https://github.com/JerryWang304/RWLock" target="_blank" rel="external">here</a></p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2016/10/27/Elon-Musk传记/" data-toggle="tooltip" data-placement="top" title="Elon Musk传记">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/04/04/How-to-write-a-Reader-Writer-Lock/"
+                        data-title="How to write a Reader-Writer Lock"
+                        data-url="http://yoursite.com/2017/04/04/How-to-write-a-Reader-Writer-Lock/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://sukai.me" target="_blank">Kai Su</a></li>
+                    
+                        <li><a href="http://blkstone.github.io" target="_blank">Yueda Jiang</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/JerryWang304">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Jerry&#39;s blog 2017 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    Ported by <a href="http://blog.kaijun.rocks">Kaijun</a> | 
+                    <iframe
+                        style="margin-left: 2px; margin-bottom:-5px;"
+                        frameborder="0" scrolling="0" width="91px" height="20px"
+                        src="https://ghbtns.com/github-btn.html?user=kaijun&repo=hexo-theme-huxblog&type=star&count=true" >
+                    </iframe>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://yoursite.com/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("http://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = 'null';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
