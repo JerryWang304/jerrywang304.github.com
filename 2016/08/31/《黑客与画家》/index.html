@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,13 +25,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/hux-blog.min.css">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- Hux Delete, sad but pending in China
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,6 +91,13 @@
                         
                         <li>
                             <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -148,7 +155,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/home-bg-o.jpg')
+        background-image: url('/img/home.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -193,10 +200,10 @@
 <li>黑客可以通过观看优秀的程序学会编程，不是看它的执行结果，而是看它的源代码。</li>
 <li>坚持一丝不苟，就能取得优秀的成果。因为那些看不见的细节累加起来，就变得可见了。</li>
 <li>几乎所有伟大的作品都是画人的，因为人类总是对自身感兴趣。</li>
-<li>训练自己去想那些不能像的事情。</li>
+<li>训练自己去想那些不能想的事情。</li>
 <li>与笨蛋辩论，你也会变成笨蛋。</li>
 <li>能够一起谈论“异端学说”并且不会因此气急败坏的人，就是你最应该认识的朋友。</li>
-<li>一捡垃圾会产生更多的垃圾。</li>
+<li>一件垃圾会产生更多的垃圾。</li>
 <li>编程语言进化缓慢的原因在于他们不是真正的技术，语言只是一种书写法。</li>
 <li>文学研究者的任何成果几乎对创作者毫无影响。</li>
 <li>编程语言是技术和宗教的混合物。</li>
@@ -509,7 +516,24 @@
 
 <!-- Image to hack wechat -->
 <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 

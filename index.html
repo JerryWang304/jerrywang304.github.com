@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,13 +25,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/hux-blog.min.css">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- Hux Delete, sad but pending in China
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,6 +91,13 @@
                         
                         <li>
                             <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -141,7 +148,7 @@
 
     <!-- Main Content -->
     <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home-bg-o.jpg')">
+<header class="intro-header" style="background-image: url('/img/home.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
@@ -192,6 +199,52 @@ Reader-Writer Lock......
     <p class="post-meta">
         Posted by Jerry Wang on
         2017-04-04
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2017/03/03/Complete-and-Sound/">
+        <h2 class="post-title">
+            Complete and Sound
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            Complete and Sound我总觉得自己脑子有问题，有些知识点怎么都记不住。就算是恍然大悟，过些天竟然还能忘掉。比如上面的complete和sound，我就是怎么都记不住，气都气死了。Stackexchange有个问题，问的是算法中的complete和sound有什么区别，连接在这里。
+如果一个算法是sound的，那么这个算法的输出一定是正确的（这里并没有说说算法一定会终止）。比如，......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Jerry Wang on
+        2017-03-03
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
+    <a href="/2016/12/09/RSA/">
+        <h2 class="post-title">
+            RSA
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            密码学是一个天才辈出的领域。这学期修了密码学，很抱歉，我基本没有听懂。偶尔还会翘翘课。不过张老师在最后一节课的总结中，回顾了整个学期的课，讲了一些有意思的topic，竟然勾起了我对密码学的兴趣…
+
+在加密领域中，非对称加密思想毋庸置疑是个革命性的idea。RSA是第一个实现非对称加密的算法，非常值得研究一下。
+现在有两个人，Alice和Bob。如果使用RAS，Alice和Bob的通信过程大致......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Jerry Wang on
+        2016-12-09
     </p>
 
 </div>
@@ -320,6 +373,27 @@ DEP与Return-to-libc攻击缓冲区溢出通常需要将shellcode注入到堆栈
 
 <div class="post-preview">
 
+    <a href="/2016/07/27/shellcode开发/">
+        <h2 class="post-title">
+            shellcode开发
+        </h2>
+        <h3 class="post-subtitle">
+            
+        </h3>
+        <div class="post-content-preview">
+            shellcode开发是一件非常麻烦的事情，programmer必须要掌握汇编语言。网上搜集到的shellcode都是机器码，要想在本机调试运行，我们可以使用下面简单的代码来装载：char shellcode[]= "...." //十六进制的机器码// 如果shellcode调用了其它的库，这里得include进来void main() &#123;    __asm &#123;    ......
+        </div>
+    </a>
+    <p class="post-meta">
+        Posted by Jerry Wang on
+        2016-07-27
+    </p>
+
+</div>
+<hr>
+
+<div class="post-preview">
+
     <a href="/2016/07/16/缓冲区溢出/">
         <h2 class="post-title">
             缓冲区溢出
@@ -343,84 +417,6 @@ DEP与Return-to-libc攻击缓冲区溢出通常需要将shellcode注入到堆栈
 </div>
 <hr>
 
-<div class="post-preview">
-
-    <a href="/2016/07/14/ARP攻击/">
-        <h2 class="post-title">
-            ARP攻击
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-kali环境下arp攻击实例
-
-开启两台虚拟机，分别是kali和ubuntu。两台虚拟机必须在同一网段。ubuntu的ip: 192.168.99.162，网关为: 192.168.99.1kali自带了arpspoof攻击，若得知对方ip和网关，以及使用的网卡。那么使用下面的命令，则可以使对方上不了网arpspoof -i [网卡] -t [ip地址] [网关地址]
-在kali中输入命令......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-14
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/02/堆溢出/">
-        <h2 class="post-title">
-            堆溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            堆溢出技术介绍堆是什么？在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。
-堆溢出举个例子#include&lt;windows.h&gt;#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main() &#123;    HANDLE hHeap; ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-02
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/06/30/intro-hexo/">
-        <h2 class="post-title">
-            使用Hexo搭建个人博客
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            戳我
-步骤
-安装hexo
-选择一个Hexo主题，到对应的repository里面下载
-启动hexo，浏览器访问这里
-将代码上传到仓库中。如果是上传到usename.github.io里面，则需要push到master分支。
-
-
-另起一行
-js joke
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-06-30
-    </p>
-
-</div>
-<hr>
-
 
 
 <!-- Pager -->
@@ -428,8 +424,16 @@ js joke
 <ul class="pager">
     
     
+        <li class="next">
+            <a href="/page/2/">Older Posts &rarr;</a>
+        </li>
+    
 </ul>
 
+
+
+                <!-- 如果开启评论功能 -->
+                
 
             </div>
     <!-- Sidebar Container -->
@@ -660,7 +664,24 @@ js joke
 
 <!-- Image to hack wechat -->
 <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 

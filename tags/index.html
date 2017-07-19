@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,13 +25,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/hux-blog.min.css">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- Hux Delete, sad but pending in China
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,6 +91,13 @@
                         
                         <li>
                             <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -142,7 +149,7 @@
     <!-- Main Content -->
     
 <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/tag-bg.jpg')">
+<header class="intro-header" style="background-image: url('/img/tags.jpg')">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
@@ -163,11 +170,11 @@
             <!-- 标签云 -->
             <div id='tag_cloud' class="tags">
                 
-                    <a href="#web" title="web" rel="1">web</a>
-                
-                    <a href="#arp" title="arp" rel="1">arp</a>
+                    <a href="#计算机安全" title="计算机安全" rel="5">计算机安全</a>
                 
                     <a href="#kali" title="kali" rel="1">kali</a>
+                
+                    <a href="#知识点" title="知识点" rel="1">知识点</a>
                 
                     <a href="#translation" title="translation" rel="1">translation</a>
                 
@@ -177,27 +184,15 @@
                 
                     <a href="#Operating System" title="Operating System" rel="1">Operating System</a>
                 
-                    <a href="#DEP" title="DEP" rel="1">DEP</a>
+                    <a href="#cryptography" title="cryptography" rel="1">cryptography</a>
                 
                     <a href="#return-to-libc" title="return-to-libc" rel="1">return-to-libc</a>
-                
-                    <a href="#ROP" title="ROP" rel="1">ROP</a>
                 
                     <a href="#SICP" title="SICP" rel="1">SICP</a>
                 
                     <a href="#Hexo" title="Hexo" rel="1">Hexo</a>
                 
-                    <a href="#Introduction" title="Introduction" rel="1">Introduction</a>
-                
-                    <a href="#Blog" title="Blog" rel="1">Blog</a>
-                
-                    <a href="#系统安全" title="系统安全" rel="1">系统安全</a>
-                
-                    <a href="#程序漏洞" title="程序漏洞" rel="1">程序漏洞</a>
-                
-                    <a href="#堆" title="堆" rel="1">堆</a>
-                
-                    <a href="#buffer overflow" title="buffer overflow" rel="1">buffer overflow</a>
+                    <a href="#测试" title="测试" rel="1">测试</a>
                 
             </div>
 
@@ -205,8 +200,8 @@
 
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="web">
-                    <span class="tag-text">web</span>
+                <span class="fa fa-tag listing-seperator" id="计算机安全">
+                    <span class="tag-text">计算机安全</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -224,21 +219,59 @@
                 </div>
                 <hr>
                 
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="arp">
-                    <span class="tag-text">arp</span>
-                </span>
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2016/07/28/Return-to-libc/">
+                        <h2 class="post-title">
+                            Return-to-libc
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
                 
                   <!-- <li class="listing-item">
                   <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/2016/07/14/ARP攻击/">
+                     <a href="/2016/07/02/堆溢出/">
                         <h2 class="post-title">
-                            ARP攻击
+                            堆溢出
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2016/07/27/shellcode开发/">
+                        <h2 class="post-title">
+                            shellcode开发
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2016/07/16/缓冲区溢出/">
+                        <h2 class="post-title">
+                            缓冲区溢出
                         </h2>
                         
                     </a>
@@ -261,6 +294,28 @@
                      <a href="/2016/07/14/ARP攻击/">
                         <h2 class="post-title">
                             ARP攻击
+                        </h2>
+                        
+                    </a>
+                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+                </div>
+                <hr>
+                
+            </div>
+            
+            <div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="知识点">
+                    <span class="tag-text">知识点</span>
+                </span>
+                
+                  <!-- <li class="listing-item">
+                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+                  </li> -->
+                 <div class="post-preview">
+                     <a href="/2017/03/03/Complete-and-Sound/">
+                        <h2 class="post-title">
+                            Complete and Sound
                         </h2>
                         
                     </a>
@@ -374,8 +429,8 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="DEP">
-                    <span class="tag-text">DEP</span>
+                <span class="fa fa-tag listing-seperator" id="cryptography">
+                    <span class="tag-text">cryptography</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -383,9 +438,9 @@
                   <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
                   </li> -->
                  <div class="post-preview">
-                     <a href="/2016/07/28/Return-to-libc/">
+                     <a href="/2016/12/09/RSA/">
                         <h2 class="post-title">
-                            Return-to-libc
+                            RSA
                         </h2>
                         
                     </a>
@@ -398,28 +453,6 @@
             <div class="one-tag-list">
                 <span class="fa fa-tag listing-seperator" id="return-to-libc">
                     <span class="tag-text">return-to-libc</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/28/Return-to-libc/">
-                        <h2 class="post-title">
-                            Return-to-libc
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="ROP">
-                    <span class="tag-text">ROP</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -484,8 +517,8 @@
             </div>
             
             <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Introduction">
-                    <span class="tag-text">Introduction</span>
+                <span class="fa fa-tag listing-seperator" id="测试">
+                    <span class="tag-text">测试</span>
                 </span>
                 
                   <!-- <li class="listing-item">
@@ -496,116 +529,6 @@
                      <a href="/2016/06/30/intro-hexo/">
                         <h2 class="post-title">
                             使用Hexo搭建个人博客
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="Blog">
-                    <span class="tag-text">Blog</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/06/30/intro-hexo/">
-                        <h2 class="post-title">
-                            使用Hexo搭建个人博客
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="系统安全">
-                    <span class="tag-text">系统安全</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/02/堆溢出/">
-                        <h2 class="post-title">
-                            堆溢出
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="程序漏洞">
-                    <span class="tag-text">程序漏洞</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/02/堆溢出/">
-                        <h2 class="post-title">
-                            堆溢出
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="堆">
-                    <span class="tag-text">堆</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/02/堆溢出/">
-                        <h2 class="post-title">
-                            堆溢出
-                        </h2>
-                        
-                    </a>
-                    <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
-                </div>
-                <hr>
-                
-            </div>
-            
-            <div class="one-tag-list">
-                <span class="fa fa-tag listing-seperator" id="buffer overflow">
-                    <span class="tag-text">buffer overflow</span>
-                </span>
-                
-                  <!-- <li class="listing-item">
-                  <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
-                  <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
-                  </li> -->
-                 <div class="post-preview">
-                     <a href="/2016/07/16/缓冲区溢出/">
-                        <h2 class="post-title">
-                            缓冲区溢出
                         </h2>
                         
                     </a>
@@ -780,7 +703,24 @@
 
 <!-- Image to hack wechat -->
 <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 

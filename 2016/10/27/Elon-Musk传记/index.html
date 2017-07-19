@@ -3,7 +3,7 @@
 
 <!-- Head tag -->
 <head>
-    <meta charset="utf-8">
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,13 +25,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/hux-blog.min.css">
 
-    <!-- Pygments Github CSS -->
-    <link rel="stylesheet" href="/css/syntax.css">
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
 
     <!-- Custom Fonts -->
     <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
     <!-- Hux change font-awesome CDN to qiniu -->
-    <link href="http://cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
     <!-- Hux Delete, sad but pending in China
@@ -49,14 +49,14 @@
     <![endif]-->
 
     <!-- ga & ba script hoook -->
-    <script></script>
+    <script></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="">
 
-    <!-- Navigation -->
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><!-- Navigation -->
 <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,6 +91,13 @@
                         
                         <li>
                             <a href="/about/">About</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
                         </li>
                         
                     
@@ -148,7 +155,7 @@
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        background-image: url('/img/home-bg-o.jpg')
+        background-image: url('/img/home.jpg')
     }
 </style>
 <header class="intro-header" >
@@ -198,6 +205,8 @@
 <h2 id="Elon不近人情？"><a href="#Elon不近人情？" class="headerlink" title="Elon不近人情？"></a>Elon不近人情？</h2><p>在事业上，Elon对自己的员工不近人情我是非常能理解的。他承担的压力我们这些凡人是无法想象的。吴军以前也在书里面说过，Elon这样很有可能把自己财富耗尽。的确，他做的事情风险太大了。当几乎把自己的钱全部投给自己热爱的公司的时候，对员工发火是挺正常的。他肯定希望自己的员工像自己一样优秀，永远坚信没有完成不了的目标，永远能够漂亮地完成任务。</p>
 <p>Elon的刻薄和无情，或许是童年时期的悲惨经历留下的后遗症。Elon小时候经常被同学打，还有，父亲在家里会对兄弟俩进行长达3个小时的精神摧残。关于这段经历，Elon没有透露更多。大概是不愿意提及这么黑暗的经历。童年的摧残，加上因专注的天赋而导致和同龄人的疏远，长大后的Elon有着社交障碍（但为什么追美女这么厉害。。。）。他像利用工具一样利用员工的工作态度，就不难理解了。甚至，我觉得Elon是需要同情的，就像我们应该同情没有童年的迈克尔杰克逊。地球上很少有人能有，并且能抗住Elon身上的压力吧。他虽然有着上百亿的身价，但这些钱都是绝大风险的衍生物，也有可能瞬间缩水，只要SpaceX的载人飞船出事。但愿这样的事情不要发生。</p>
 <p>不过Elon把助手布朗辞掉这件事情，我是不太能理解。也可能是我太喜欢钢铁侠了，幻想Elon也有Stark和Pepper这样的罗曼史。我这种软心肠的人，是干不来这种事情的，不过我也没有这么黑暗的童年。</p>
+<hr>
+<p>Elon这类的人存在，就是让别人意识到自己有多渺小。我倒不是一心想成为像Elon这样的人，我只是一向特别羡慕那些为自己的理想冒死拼搏的人。</p>
 
 
                 <hr>
@@ -207,7 +216,7 @@
                 <ul class="pager">
                     
                         <li class="previous">
-                            <a href="/2017/04/04/How-to-write-a-Reader-Writer-Lock/" data-toggle="tooltip" data-placement="top" title="How to write a Reader-Writer Lock">&larr; Previous Post</a>
+                            <a href="/2016/12/09/RSA/" data-toggle="tooltip" data-placement="top" title="RSA">&larr; Previous Post</a>
                         </li>
                     
                     
@@ -482,7 +491,24 @@
 
 <!-- Image to hack wechat -->
 <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
+<!-- Migrate from head to bottom, no longer block render and still work --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 </body>
 
