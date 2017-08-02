@@ -191,7 +191,7 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-                <p>shellcode开发是一件非常麻烦的事情，programmer必须要掌握汇编语言。网上搜集到的shellcode都是机器码，要想在本机调试运行，我们可以使用下面简单的代码来装载：<br><figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="keyword">char</span> shellcode[]= <span class="string">"...."</span> <span class="comment">//十六进制的机器码</span></div><div class="line"><span class="comment">// 如果shellcode调用了其它的库，这里得include进来</span></div><div class="line"><span class="keyword">void</span> main() &#123;</div><div class="line">    <span class="number">__</span><span class="keyword">asm</span> &#123;</div><div class="line">        lea eax, shellcode ;eax寄存器里是shellcode代码的地址</div><div class="line">        push eax</div><div class="line">        ret ;将地址赋值给IP寄存器</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+                <p>shellcode开发是一件非常麻烦的事情，programmer必须要掌握汇编语言。网上搜集到的shellcode都是机器码，要想在本机调试运行，我们可以使用下面简单的代码来装载：<br><figure class="highlight c"><table><tr><td class="code"><pre><div class="line"><span class="keyword">char</span> shellcode[]= <span class="string">"...."</span> <span class="comment">//十六进制的机器码</span></div><div class="line"><span class="comment">// 如果shellcode调用了其它的库，这里得include进来</span></div><div class="line"><span class="keyword">void</span> main() &#123;</div><div class="line">    __asm &#123;</div><div class="line">        lea eax, shellcode ;eax寄存器里是shellcode代码的地址</div><div class="line">        push eax</div><div class="line">        ret ;将地址赋值给IP寄存器</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
 
                 <hr>
