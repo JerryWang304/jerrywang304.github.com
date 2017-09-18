@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog
+          Dynamic Programming - Jerry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/i_dont_wanna_use_default_archives/2017/04/">
+    <link rel="canonical" href="http://yoursite.com/2017/09/18/Dynamic-Programming/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,7 +147,205 @@
 
 
     <!-- Main Content -->
-    <!-- Default Archive layout, we use archives instead. -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Algorithms" title="Algorithms">Algorithms</a>
+                        
+                    </div>
+                    <h1>Dynamic Programming</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2017-09-18
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3 id="Rod-cutting"><a href="#Rod-cutting" class="headerlink" title="Rod cutting"></a>Rod cutting</h3><p>动态规划这种算法，如果忽然顿悟了，看清了它的本质，就会觉得不过如此，如果不理解，那可真是怎么搞都搞不懂。晚上又看了一下算导，动态规划那一章讲了一道很有趣的题目：有一根长度为n的竿子，你可以随便切，切成两根，三根都无所谓，但是不同长度的竿子可以卖出不同的价格。如果给定了下面这个价格表，问这根竿子最多可以卖多少钱？</p>
+<table>
+<thead>
+<tr>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>5</td>
+<td>8</td>
+<td>9</td>
+<td>17</td>
+<td>17</td>
+<td>20</td>
+<td>24</td>
+<td>30</td>
+</tr>
+</tbody>
+</table>
+<p>看下面这张图，更容易理解：</p>
+<p><img src="rodcutting.png" alt="rod"></p>
+<p>从上图可以看出，按照(c)中的切法，可以获得最高利润，也就是10。所以，该怎么解决这个问题？</p>
+<h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p>最简单的方法自然是暴力。对于长度为n的竿子，我可以砍n-1刀，显然有$2^{n-1}$种砍法。</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/09/09/社会主义国家中最好的经济学家/" data-toggle="tooltip" data-placement="top" title="社会主义国家中最好的经济学家">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/09/18/Dynamic-Programming/"
+                        data-title="Dynamic Programming"
+                        data-url="http://yoursite.com/2017/09/18/Dynamic-Programming/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://sukai.me" target="_blank">Kai Su</a></li>
+                    
+                        <li><a href="http://blkstone.github.io" target="_blank">Yueda Jiang</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
 
     <!-- Footer -->
     <!-- Footer -->
