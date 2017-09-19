@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog
+          Greedy Algorithms - Jerry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/page/2/">
+    <link rel="canonical" href="http://yoursite.com/2017/09/19/Greedy-Algorithms/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,305 +147,104 @@
 
 
     <!-- Main Content -->
-    <!-- Page Header -->
-<header class="intro-header" style="background-image: url('/img/home.jpg')">
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home.jpg')
+    }
+</style>
+<header class="intro-header" >
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
-                <div class="site-heading">
-                    <h1>Jerry&#39;s blog</h1>
-                    <!--<hr class="small">-->
-                    <span class="subheading"></span>
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#Algorithms" title="Algorithms">Algorithms</a>
+                        
+                    </div>
+                    <h1>Greedy Algorithms</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2017-09-19
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </header>
 
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
 
-
-<!-- Main Content -->
-<div class="container">
-    <div class="row">
-        
-
-<!-- USE SIDEBAR -->
     <!-- Post Container -->
             <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
-            
-                <!-- Main Content -->
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h3 id="如何看更多场电影问题"><a href="#如何看更多场电影问题" class="headerlink" title="如何看更多场电影问题"></a>如何看更多场电影问题</h3><p>假如你潜入了一家电影院，可以在里面偷偷摸摸地看电影，假设你知道了这家电影院的当天电影放映时间表，问题是选择看哪些电影，才能使得看完的总电影数最多？（不允许一部电影没看完，然后就去看另一部）</p>
+<p>问题的输入只有两个数组s和f。s[i]返回第i部电影的开始时间，f[i]返回第i部电影的结束时间。记ai表示某部电影。如何设计算法？</p>
+<p>想算法之前，先考虑一个最优解有什么特点。假设我们已经知道了一个最优解a1, a2, a3, … ak, … , an，这意味着不存在另一个序列，可以增加我们看电影的场次n。把ak拿开，考虑这个问题的子问题，很容易会发现，从a1这部电影的开始时间到ak的开始时间的时间段里，不存在另一个电影序列，比a1,a2,…,ak-1好。否则，之前的最优解就不是最优解了。同理，ak+1,…,an也是后面这个时间段一个最优解。</p>
+<p>这正好前面说的动态规划必须满足的一个条件：optimal substructure。这个问题是否也符合overlapping subproblems？当然也满足。ak之前和之后两个问题和整个大问题本质上是一样的。所以，这个题目可以用动态规划解。具体解法就不写了，这个题目和CLSR讲贪心算法的第一个例子本质上是一样的。</p>
+<p>这个问题恰好可以用贪心算法解决。所谓的贪心算法就是，每次面临选择的时候，我都选择在当前看来是最好的解。这就像找换零钱一样，你给我100块让我换点零钱（要求不同种类的货币的总数量最少，直接给你100个硬币你肯定很无语）。我看我兜里有一张50的，我就把50的先给你了。现在我发现我没有50的了，但我有两张20的，我就把这两张20的给你了。此时，我兜里还有十几个一元硬币，最后我给你10个硬币就好了。贪心的意思是懒，而且短视，不像动态规划，我一个决策要考虑到子问题的结果（转移方程里的max之类函数就是这个意思）。</p>
+<p>所以，该怎么用贪心算法解决这个问题呢？</p>
+<p>想看更多场次的电影，一个很目光短浅，又很急躁的人会怎么想？一种方法是我正在看的这部电影越早结束越好，这样就可以抓紧看下一部电影了。所以应该从最早结束的电影开始看，看完再看下一部最早结束的电影。对吗？总感觉好像不对啊。换一个思路，我选择最早开始的电影，然后迫不及待的去看，看完立马再去看下一部最早开始的电影，好像也很”贪心算法”的样子是不是~如果你比较机灵一点，应该能立马能想到一个反例推翻这种算法：如果正在看的这部电影结束的时候，别的电影都开始放映了，那这种方法只能看一部电影了。</p>
+<p>所以，”贪心算法”到底怎么贪法？</p>
+<p>我感觉，这个问题很难回答，得看具体要解决什么问题。我们再看这个看电影例子的最优解，如果a1是最早结束的电影，那么我发现<strong>存在一个最优解，这个最优解的第一个电影是最早结束的电影</strong>。如果a1不是最早结束的电影，我用最早结束的电影a0替换a1。这个替换不和a2，以及之后的电影冲突。为什么呢？因为a1不是最早结束的电影，说明a2和之后的电影的开始时间一定不早于a0。我看完a0，喝了杯可乐a1才结束，再上个厕所，a2才开始…这说明，我<strong>总能找到一个最优解使得这个序列的第一个是最早结束的电影</strong>。（greedy choice property）但是，如果选择最早开始的电影则推不出这个结论。事实上，很容易构建一个反例，是的我的所有最优解都不包含最早开始的电影。</p>
+<p>好，那我就先看最早结束的电影。看完了，我发现，我面临的问题和整个大问题是一样的(optimal substruture)。按相同的套路继续看电影，看一整天，我就得到了最优解了。神不神奇？</p>
+<p>CLRS上说一个能用贪心算法解决的问题，几乎也能用动态规划解决，不过这个动态规划算法复杂度会更高。应用贪心算法之前，应该先证明optimal substruture和greedy choice property。实际上所谓的贪心算法往往得不到最优解，能用贪心算法解决的问题很少。另一方面，这个到底该贪法也比较模糊，所以我不喜欢贪心算法，还是动态规划好玩一点…</p>
 
 
-<div class="post-preview">
+                <hr>
 
-    <a href="/2016/08/25/SICP-solution-1-6/">
-        <h2 class="post-title">
-            SICP-solution-1.6
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            这个问题问：如果用new-if替换if的话，原来的计算平方根程序会发生什么情况？我刚开始没想明白，后来看网上的提示忽然懂了。lisp是应用序求值语言，比如函数调用的过程中，参数是表达式的形式，则必须把表达式的值计算出来。这样是为了防止重复计算。但有一种情况比较特殊：if。看下面的程序：（define (p) (p)）
-如果调用p这个函数的话，则会永远递归下去。(if (= 9 9) 0 (p......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-08-25
-    </p>
+                
 
-</div>
-<hr>
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/09/18/Dynamic-Programming/" data-toggle="tooltip" data-placement="top" title="Dynamic Programming">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
 
-<div class="post-preview">
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2017/09/19/Greedy-Algorithms/"
+                        data-title="Greedy Algorithms"
+                        data-url="http://yoursite.com/2017/09/19/Greedy-Algorithms/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
 
-    <a href="/2016/08/02/Efficient-Reading-of-Papers-in-Science-and-Technology/">
-        <h2 class="post-title">
-            Efficient Reading of Papers in Science and Technology
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-翻译原文:http://www.cs.columbia.edu/~hgs/netbib/efficientReading.pdf
-
-为什么要阅读？在开始阅读一篇论文之前，脑子里先想想为什么要干这件事。你想从中得到什么呢？这个问题的答案决定着你如何阅读论文。如果你只想知道这篇论文的概述，那么简要的浏览就够了。如果你打算把这篇论文的内容展示给别人，那你得好好挖了,直到你把这篇论文的观点都弄明白......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-08-02
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/28/Return-to-libc/">
-        <h2 class="post-title">
-            Return-to-libc
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-本文简要总结网上的一篇博客 http://www.ibm.com/developerworks/cn/linux/1402_liumei_rilattack/
-
-DEP与Return-to-libc攻击缓冲区溢出通常需要将shellcode注入到堆栈中，然后覆盖函数的返回地址，指向shellcode，执行恶意代码。这种攻击方式可以概括为先写后执行。数据执行保护策略(Data Executi......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-28
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/27/shellcode开发/">
-        <h2 class="post-title">
-            shellcode开发
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            shellcode开发是一件非常麻烦的事情，programmer必须要掌握汇编语言。网上搜集到的shellcode都是机器码，要想在本机调试运行，我们可以使用下面简单的代码来装载：char shellcode[]= "...." //十六进制的机器码// 如果shellcode调用了其它的库，这里得include进来void main() &#123;    __asm &#123;    ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-27
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/16/缓冲区溢出/">
-        <h2 class="post-title">
-            缓冲区溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-环境： Windows XP SP3, VC6.0
-
-先上代码：
-#include&lt;stdio.h&gt;#include&lt;string.h&gt;#include&lt;windows.h&gt;char name[] = "\x41\x41\x41\x41""\x41\x41\x41\x41""\x41\x41\x41\x41" // 覆盖EBP"\x12\x45\xfa\......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-16
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/14/ARP攻击/">
-        <h2 class="post-title">
-            ARP攻击
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            
-kali环境下arp攻击实例
-
-开启两台虚拟机，分别是kali和ubuntu。两台虚拟机必须在同一网段。ubuntu的ip: 192.168.99.162，网关为: 192.168.99.1kali自带了arpspoof攻击，若得知对方ip和网关，以及使用的网卡。那么使用下面的命令，则可以使对方上不了网arpspoof -i [网卡] -t [ip地址] [网关地址]
-在kali中输入命令......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-14
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/07/02/堆溢出/">
-        <h2 class="post-title">
-            堆溢出
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            堆溢出技术介绍堆是什么？在程序运行过程中，每个线程都会被分配一个栈，用来存储局部变量。但是对于不确定大小的变量，例如malloc()分配的动态空间，则被存储在堆上。
-堆溢出举个例子#include&lt;windows.h&gt;#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main() &#123;    HANDLE hHeap; ......
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-07-02
-    </p>
-
-</div>
-<hr>
-
-<div class="post-preview">
-
-    <a href="/2016/06/30/intro-hexo/">
-        <h2 class="post-title">
-            使用Hexo搭建个人博客
-        </h2>
-        <h3 class="post-subtitle">
-            
-        </h3>
-        <div class="post-content-preview">
-            戳我
-步骤
-安装hexo
-选择一个Hexo主题，到对应的repository里面下载
-启动hexo，浏览器访问这里
-将代码上传到仓库中。如果是上传到usename.github.io里面，则需要push到master分支。
-
-
-另起一行
-js joke
-...
-        </div>
-    </a>
-    <p class="post-meta">
-        Posted by Jerry Wang on
-        2016-06-30
-    </p>
-
-</div>
-<hr>
-
-
-
-<!-- Pager -->
-
-<ul class="pager">
-    
-        <li class="previous">
-            <a href="/">&larr; Newer Posts</a>
-        </li>
-    
-    
-</ul>
-
-
-
-                <!-- 如果开启评论功能 -->
                 
 
             </div>
+    <!-- Side Catalog Container -->
+        
+
     <!-- Sidebar Container -->
+
             <div class="
-                col-lg-3 col-lg-offset-0
-                col-md-3 col-md-offset-0
-                col-sm-12
-                col-xs-12
-                sidebar-container
-            ">
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
                 <!-- Featured Tags -->
                 
 
-                <!-- Short About -->
-                <section class="visible-md visible-lg">
-                    <hr><h5><a href="/about/">ABOUT ME</a></h5>
-                    <div class="short-about">
-
-                        
-                            <img src="/img/cute.jpg" />
-                        
-
-                        
-                            <p>只要心中有景，何处不是花香满径</p>
-                        
-
-                        <!-- SNS Link -->
-                        <ul class="list-inline">
-                            
-                            
-                            
-
-                            
-
-                            
-
-                            
-                                <li>
-                                    <a target="_blank"  href="https://github.com/JerryWang304">
-                                        <span class="fa-stack fa-lg">
-                                            <i class="fa fa-circle fa-stack-2x"></i>
-                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            
-                            
-                        </ul>
-                    </div>
-                </section>
-                
                 <!-- Friends Blog -->
                 
                 <hr>
@@ -460,9 +259,69 @@ js joke
                 </ul>
                 
             </div>
-        
+
+        </div>
     </div>
-</div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
 
 
     <!-- Footer -->
