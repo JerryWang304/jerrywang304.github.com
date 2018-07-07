@@ -13,11 +13,11 @@
 
     <title>
         
-          Jerry&#39;s Blog
+          一道谷歌面试题 - Jerry&#39;s Blog
         
     </title>
 
-    <link rel="canonical" href="http://yoursite.com/i_dont_wanna_use_default_archives/2016/06/">
+    <link rel="canonical" href="http://yoursite.com/2018/07/07/一道谷歌面试题/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -147,7 +147,191 @@
 
 
     <!-- Main Content -->
-    <!-- Default Archive layout, we use archives instead. -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://yoursite.com/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#interview" title="interview">interview</a>
+                        
+                    </div>
+                    <h1>一道谷歌面试题</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Jerry Wang on
+                        2018-07-07
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <p>吴军的《Google的方法论》专栏里面讲了一道很有意思的Google面试题</p>
+<blockquote>
+<p>给你两个一模一样的玻璃球，这两个球从一定高度掉到地上的话会摔碎，但是在这个恰好摔碎的高度下，怎么都不会碎。已知这个恰好摔碎的高度在1到100层楼中间某一层，如何利用这两个球，尽量使用<strong>最少的次数</strong>测量出这个高度呢？</p>
+</blockquote>
+<p>吴军说了，这个题目考察的是工程师有没有粗调和精调的思想。说的再详细一些，应该先用一个球得到这个高度的大致范围，再用另一个球慢慢在这个范围内，找到这个具体的值。</p>
+<p>吴军给出的答案是，先用一个球从10层往下抛，如果没坏，再到20层往下抛。如果球在第40层摔碎了，那么这个恰好摔碎的高度在30~40之间。这个时候，我们从第31层开始，一层一层尝试，肯定能利用最后一球得到这个恰好摔碎的高度。总的来看，不出20次试验，我们就能找到这个高度值。</p>
+<p>问题是，这个策略是怎么得到的呢？为什么是10层10层的尝试，而不是20层20层呢？推理过程其实非常简单，不会超出高中数学范围。</p>
+<p>假设粗调的过程里面我们每次尝试的层数为$x$，由于楼的高度为100，这样粗调的步骤最多为$\frac{100}{x}$次。精调的过程中，我们是在高度为$x$的楼层间依次实验，显然这里实验的次数不会超过$x$。因此总的试验次数<strong>最多</strong>为：<br>$$<br>\frac{100}{x} + x<br>$$<br>当$x=10$是，取最小值20。所以这种策略能保证不超过20次，就能得到答案。</p>
+<p>吴军又问了，给你三个球呢？</p>
+<p>其实也比较容易想出来。在有三个球的情况下，前两个球依然用来粗调，最后一个球用来精调。精调永远是最后一步。假设我们用第一个球每次尝试的高度为$x_1$，第二个球每次尝试的高度为$x_2$，最后一个球会在高度为$x_2$的楼层间实验，最多尝试$x_2$次。</p>
+<p>可以想象一种场景，你用第一个球没30层试验一下，发现在第90层，球碎了。然后跑到第60层，继续来个粗调。这个过程中，你拍拍脑袋，决定每10层尝试一下，发现在第80层，球又碎了，显然这个临界高度在第70~80中间。你利用最后一个球在这10层间依次尝试，肯定能得到最终答案。</p>
+<p>问题是$x_1$和$x_2$应该取多少呢？</p>
+<p>第一步粗调，最多需要多少次？$\frac{100}{x_1}$</p>
+<p>第二步粗调，最多需要多少次？$\frac{x_1}{x_2}$</p>
+<p>第三步精调，最多需要多杀次? $x_2$</p>
+<p>所以，总体来看，试验次数最多为：<br>$$<br>\frac{100}{x_1} +\frac{x_1}{x_2} + x_2<br>$$<br>显然，当这三者相等时，总的值最小。这时<br>$$<br>x_1 = 10 \sqrt[3]{10} \approx21.5 \quad x_2 = \sqrt{x_1} \approx 4.6<br>$$<br>这个答案和吴军的一样。</p>
+<p>三个小球的问题是吴军在下一篇讲井盖是圆的还是方的面试题提出的。你问我井盖是圆的还是方的? 我放几张学校的图…</p>
+<p><img src="/Users/jerry/blog/source/_posts/一道谷歌面试题/gai1.jpeg" alt=""></p>
+<p><img src="/Users/jerry/blog/source/_posts/一道谷歌面试题/gai2.jpeg" alt=""></p>
+<p>还有一些上面写“雨”的正方形盖子，我忘了拍下来了…</p>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                    
+                        <li class="next">
+                            <a href="/2018/06/25/见识/" data-toggle="tooltip" data-placement="top" title="见识">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread"
+                        data-thread-key="2018/07/07/一道谷歌面试题/"
+                        data-title="一道谷歌面试题"
+                        data-url="http://yoursite.com/2018/07/07/一道谷歌面试题/" >
+                    </div>
+                </div>
+                <!-- 多说评论框 end -->
+                
+
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+
+                    
+                        <li><a href="http://sukai.me" target="_blank">Kai Su</a></li>
+                    
+                        <li><a href="http://blkstone.github.io" target="_blank">Yueda Jiang</a></li>
+                    
+                </ul>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    // dynamic User by Hux
+    var _user = 'xxx';
+
+    // duoshuo comment query.
+    var duoshuoQuery = {short_name: _user };
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
 
     <!-- Footer -->
     <!-- Footer -->
